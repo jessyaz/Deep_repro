@@ -11,7 +11,7 @@ mlflow.db
 checkpoints/
 
 # Data
-data/
+/data/
 
 # Pycache folders
 __pycache__/
