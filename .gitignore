@@ -12,3 +12,6 @@ checkpoints/
 
 # Data
 data/
+
+# Pycache folders
+__pycache__/
