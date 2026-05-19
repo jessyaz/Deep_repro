@@ -1,0 +1,14 @@
+hyperparameters:
+  input_dim: 784
+  hidden_dim: 64
+  n_layers: 2
+  output_dim: 10
+  dropout: 0.2
+
+model:
+  _target_: models.mnist_mlp.SimpleMLP
+  input_dim: ${model.hyperparameters.input_dim}
+  hidden_dim: ${model.hyperparameters.hidden_dim}
+  n_layers: ${model.hyperparameters.n_layers}
+  output_dim: ${model.hyperparameters.output_dim}
+  dropout: ${model.hyperparameters.dropout}

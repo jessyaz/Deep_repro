@@ -1,0 +1,6 @@
+hyperparameters:
+
+model:
+  _target_: models.mnist_cnn.SimpleCNN
+
+

@@ -1,0 +1,9 @@
+defaults:
+  - data: data
+  - model: mlp
+  - training: training
+  - _self_
+
+exp_name: mlp_experiment
+checkpoints_dir: checkpoints/
+mlflow_db: sqlite:///mlflow/mlflow.db
