@@ -11,6 +11,7 @@ import numpy as np
 import arff
 
 def fetch_mnist_from_openml():
+    os.makedirs('data', exist_ok=True)
     urlretrieve(url='https://www.openml.org/data/download/52667/mnist_784.arff',
                 filename='data/mnist_784.arff')
 
