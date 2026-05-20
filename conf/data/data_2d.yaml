@@ -1,0 +1,2 @@
+data_path: data/mnist_28_28.pkl
+flattened: false

@@ -6,7 +6,7 @@ hyperparameters:
   dropout: 0.2
 
 model:
-  _target_: models.mnist_mlp.SimpleMLP
+  _target_: train.SimpleMLP
   input_dim: ${model.hyperparameters.input_dim}
   hidden_dim: ${model.hyperparameters.hidden_dim}
   n_layers: ${model.hyperparameters.n_layers}
