@@ -3,7 +3,7 @@ Evaluate a trained model from an MLflow run_id.
 Recovers checkpoint and config from the run, evaluates on the test set,
 and logs a metrics report back as an artifact to the same run.
 """
-import json
+
 import tempfile
 from typing import Any, cast
 import numpy as np
@@ -16,9 +16,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 from dataops.dataobject import DataObject
 
 
-@hydra.main(config_path='conf',
-            config_name='eval',
-            version_base='1.3')
+@hydra.main(config_path="conf", config_name="eval", version_base="1.3")
 def main(cfg: DictConfig):
     device = torch.device("cpu")
     print(f"Using device: {device}")
@@ -39,9 +37,11 @@ def main(cfg: DictConfig):
         )
 
         # Rebuild data pipeline from the recovered config file
-        data_object = DataObject(data_path=exp_cfg.data.data_path,
-                                 flattened=exp_cfg.data.flattened,
-                                 batch_size=exp_cfg.training.batch_size)
+        data_object = DataObject(
+            data_path=exp_cfg.data.data_path,
+            flattened=exp_cfg.data.flattened,
+            batch_size=exp_cfg.training.batch_size,
+        )
         data_object.make_datasets()
         data_object.make_dataloaders()
 
@@ -75,15 +75,22 @@ def main(cfg: DictConfig):
 
         # Push report to the same MLflow run
         with mlflow.start_run(run_id=cfg.run_id):
-            mlflow.log_metrics({
-                "test/accuracy": float(report_dict["accuracy"]),
-                "test/macro_f1": float(report_dict["macro avg"]["f1-score"]),
-                "test/weighted_f1": float(report_dict["weighted avg"]["f1-score"]),
-                "test/macro_precision": float(report_dict["macro avg"]["precision"]),
-                "test/macro_recall": float(report_dict["macro avg"]["recall"]),
-            })
-            mlflow.log_text(classification_report(all_labels, all_preds),
-                            "classification_report.txt")
+            mlflow.log_metrics(
+                {
+                    "test/accuracy": float(report_dict["accuracy"]),
+                    "test/macro_f1": float(report_dict["macro avg"]["f1-score"]),
+                    "test/weighted_f1": float(report_dict["weighted avg"]["f1-score"]),
+                    "test/macro_precision": float(
+                        report_dict["macro avg"]["precision"]
+                    ),
+                    "test/macro_recall": float(report_dict["macro avg"]["recall"]),
+                }
+            )
+            mlflow.log_text(
+                classification_report(all_labels, all_preds),
+                "classification_report.txt",
+            )
+
 
 if __name__ == "__main__":
     main()
