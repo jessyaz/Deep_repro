@@ -57,6 +57,8 @@ def main(cfg: DictConfig):
         all_labels, all_preds, all_probs = [], [], []
         with torch.no_grad():
             for X_batch, y_batch in data_object.test_dl:
+                if cfg.noise_std > 0.0:
+                    X_batch = X_batch + torch.randn_like(X_batch) * cfg.noise_std
                 logits = model(X_batch)
                 probs = torch.softmax(logits, dim=1)
                 all_labels.extend(y_batch.numpy())

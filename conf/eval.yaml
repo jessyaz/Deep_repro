@@ -1,1 +1,2 @@
 run_id: default
+noise_std: 0.0 # Gaussian noise std added to inputs at test time (0 = disabled)
