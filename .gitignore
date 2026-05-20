@@ -2,13 +2,13 @@
 .venv/
 
 # Mlflow and hydra outputs
-mlruns/
-multirun/
-outputs/
-mlflow.db
+/mlruns/
+/multirun/
+/outputs/
+/mlflow.db
 
 # Temporal checkpoints for models
-checkpoints/
+/checkpoints/
 
 # Data
 /data/

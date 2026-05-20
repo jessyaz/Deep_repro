@@ -15,13 +15,13 @@ import arff
 def fetch_mnist_from_openml():
     os.makedirs("data", exist_ok=True)
     urlretrieve(
-        url="https://www.openml.org/data/download/52667/mnist_784.arff",
-        filename="data/mnist_784.arff",
+        url="https://www.openml.org/data/download/18238735/phpnBqZGZ",
+        filename="data/fmnist_784.arff",
     )
 
 
 def preprocess_mnist_data():
-    with open("data/mnist_784.arff", "r") as f:
+    with open("data/fmnist_784.arff", "r") as f:
         dataset = arff.load(f)
     print(dataset.keys())
     data = np.array(dataset["data"])
@@ -46,7 +46,7 @@ def preprocess_mnist_data():
         "X_test": X_test,
         "y_test": y_test,
     }
-    with open("data/mnist_flat.pkl", "wb") as f:
+    with open("data/fmnist_flat.pkl", "wb") as f:
         pickle.dump(mnist_flat, f)
 
     mnist_28_28 = {
@@ -66,12 +66,12 @@ def preprocess_mnist_data():
         f"X_test: {mnist_28_28['X_test'].shape}, y_test: {mnist_28_28['y_test'].shape}"
     )
 
-    with open("data/mnist_28_28.pkl", "wb") as f:
+    with open("data/fmnist_28_28.pkl", "wb") as f:
         pickle.dump(mnist_28_28, f)
 
 
 if __name__ == "__main__":
     os.makedirs("data", exist_ok=True)
-    if not os.path.exists("data/mnist_784.arff"):
+    if not os.path.exists("data/fmnist_784.arff"):
         fetch_mnist_from_openml()
     preprocess_mnist_data()

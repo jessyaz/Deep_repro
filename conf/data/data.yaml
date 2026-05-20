@@ -1,2 +1,2 @@
-data_path: data/mnist_flat.pkl
+data_path: data/fmnist_flat.pkl
 flattened: true

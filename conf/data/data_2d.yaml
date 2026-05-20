@@ -1,2 +1,2 @@
-data_path: data/mnist_28_28.pkl
+data_path: data/fmnist_28_28.pkl
 flattened: false
