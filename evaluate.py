@@ -70,7 +70,7 @@ def main(cfg: DictConfig):
         all_probs = np.array(all_probs)
 
         # Compute metrics
-        report_dict = classification_report(all_labels, all_preds, output_dict=True)
+        report_dict = classification_report(all_labels, all_preds, output_dict=True, zero_division=0)
 
         print(f"Accuracy: {report_dict['accuracy']:.4f}")
         print(f"Macro F1: {report_dict['macro avg']['f1-score']:.4f}")
@@ -90,7 +90,7 @@ def main(cfg: DictConfig):
                 }
             )
             mlflow.log_text(
-                classification_report(all_labels, all_preds),
+                classification_report(all_labels, all_preds, zero_division=0),
                 "classification_report.txt",
             )
 
