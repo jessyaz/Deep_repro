@@ -6,6 +6,7 @@ and logs a metrics report back as an artifact to the same run.
 
 import tempfile
 from typing import Any, cast
+import train  # registers train.SimpleMLP / train.SimpleCNN for Hydra instantiate
 import numpy as np
 import mlflow
 import torch

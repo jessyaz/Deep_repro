@@ -1,6 +1,14 @@
 hyperparameters:
+  input_channels: 1
+  hidden_dim: 32
+  n_layers: 1
+  output_dim: 10
+  dropout: 0.2
 
 model:
-  _target_: models.mnist_cnn.SimpleCNN
-
-
+  _target_: train.SimpleCNN
+  input_channels: ${model.hyperparameters.input_channels}
+  hidden_dim: ${model.hyperparameters.hidden_dim}
+  n_layers: ${model.hyperparameters.n_layers}
+  output_dim: ${model.hyperparameters.output_dim}
+  dropout: ${model.hyperparameters.dropout}

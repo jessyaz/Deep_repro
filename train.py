@@ -3,6 +3,9 @@ This script launch a training experiment using the config files.
 """
 
 import os
+import sys
+
+sys.modules.setdefault("train", sys.modules["__main__"])
 import mlflow
 import torch
 import hydra
@@ -19,6 +22,7 @@ import torch.nn.functional as F
 ###############################################################################
 
 
+# run that : python train.py model=cnn data=data_2d exp_name=cnn_experiment
 class SimpleCNN(nn.Module):
     def __init__(self, input_channels, hidden_dim, n_layers, output_dim, dropout):
         super().__init__()
@@ -38,8 +42,7 @@ class SimpleCNN(nn.Module):
                 nn.Dropout(dropout),
             ]
         self.cnn = nn.Sequential(*layers)
-        # After n_layers MaxPool2d(2) on a 28x28 input:
-        # spatial size = 28 // (2 ** n_layers)
+        # After n_layers MaxPool2d(2) on a 28x28 input: spatial size = 28 // (2 ** n_layers)
         spatial = 28 // (2**n_layers)
         self.linear = nn.Linear(hidden_dim * spatial * spatial, output_dim)
 
