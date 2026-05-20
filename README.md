@@ -27,6 +27,7 @@ uv run train.py
 To inspect the results, you can use the following command:
 
 ```bash
+lsof -ti :5000 | xargs kill -9
 mlflow ui
 ```
 
