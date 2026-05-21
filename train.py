@@ -156,7 +156,8 @@ def main(cfg: DictConfig):
     optimizer = instantiate(cfg.training.optimizer, params=model.parameters())
     criterion = instantiate(cfg.training.criterion)
 
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
+
     mlflow.set_experiment(cfg.exp_name)
     with mlflow.start_run():
         mlflow.set_tag("exp_name", cfg.exp_name)

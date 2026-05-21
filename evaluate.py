@@ -22,7 +22,7 @@ def main(cfg: DictConfig):
     device = torch.device("cpu")
     print(f"Using device: {device}")
 
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
 
     with tempfile.TemporaryDirectory() as tmp:
         # Recover config and best checkpoint from the run
@@ -70,7 +70,9 @@ def main(cfg: DictConfig):
         all_probs = np.array(all_probs)
 
         # Compute metrics
-        report_dict = classification_report(all_labels, all_preds, output_dict=True, zero_division=0)
+        report_dict = classification_report(
+            all_labels, all_preds, output_dict=True, zero_division=0
+        )
 
         print(f"Accuracy: {report_dict['accuracy']:.4f}")
         print(f"Macro F1: {report_dict['macro avg']['f1-score']:.4f}")
