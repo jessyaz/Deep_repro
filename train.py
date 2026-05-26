@@ -3,9 +3,6 @@ This script launch a training experiment using the config files.
 """
 
 import os
-import sys
-
-sys.modules.setdefault("train", sys.modules["__main__"])
 import mlflow
 import torch
 import hydra
@@ -168,7 +165,7 @@ def main(cfg: DictConfig):
         for key, value in cfg.model.hyperparameters.items():
             mlflow.log_param(key, value)
 
-        train(
+        best_val_accuracy = train(
             model,
             data_object=data_object,
             epochs=cfg.training.epochs,
@@ -176,6 +173,10 @@ def main(cfg: DictConfig):
             criterion=criterion,
             checkpoint_dir=cfg.checkpoints_dir + cfg.exp_name,
         )
+        mlflow.log_metric("val/best_accuracy", best_val_accuracy)
+
+    # Returned value is maximized by Optuna (direction=maximize in the hpo config)
+    return best_val_accuracy
 
 
 if __name__ == "__main__":

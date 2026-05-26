@@ -1,4 +1,5 @@
 defaults:
+  - data: data
   - model: mlp
   - training: training
   - override hydra/sweeper: optuna
@@ -17,7 +18,7 @@ hydra:
     n_jobs: 1
     params:
       model.hyperparameters.hidden_dim: tag(log, int(32, 512))
-      model.hyperparameters.n_layers: range(1, 5)
-      model.hyperparameters.dropout: float(0.0, 0.5)
-      training.optimizer.lr: tag(log, interval(1e-4, 1e-2))
-      training.batch_size: choice(64, 128, 256)
+      # model.hyperparameters.n_layers: range(1, 4)
+      # model.hyperparameters.dropout: float(0.0, 0.5)
+      # training.optimizer.lr: tag(log, interval(1e-4, 1e-2))
+      # training.batch_size: choice(64, 128, 256)
