@@ -85,7 +85,7 @@ def train(
     criterion: nn.Module = None,
     checkpoint_dir: str = None,
     noise_std: float = 0.0,
-):
+) -> float:
     best_accuracy = 0.0
 
     for epoch in range(epochs):
@@ -118,17 +118,18 @@ def train(
             {"train/loss": avg_loss, "val/accuracy": accuracy}, step=epoch
         )
 
-        if checkpoint_dir is not None:
-            if accuracy > best_accuracy:
-                best_accuracy = accuracy
-                best_path = os.path.join(checkpoint_dir, "best_checkpoint.pt")
-                torch.save(model.state_dict(), best_path)
-                mlflow.log_artifact(best_path, artifact_path="checkpoints")
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_path = os.path.join(checkpoint_dir, "best_checkpoint.pt")
+            torch.save(model.state_dict(), best_path)
+            mlflow.log_artifact(best_path, artifact_path="checkpoints")
 
-            if (epoch + 1) % 2 == 0:
-                periodic_path = os.path.join(checkpoint_dir, f"epoch_{epoch + 1}.pt")
-                torch.save(model.state_dict(), periodic_path)
-                mlflow.log_artifact(periodic_path, artifact_path="checkpoints")
+        if (epoch + 1) % 2 == 0:
+            periodic_path = os.path.join(checkpoint_dir, f"epoch_{epoch + 1}.pt")
+            torch.save(model.state_dict(), periodic_path)
+            mlflow.log_artifact(periodic_path, artifact_path="checkpoints")
+
+    return best_accuracy
 
 
 ###############################################################################
@@ -156,7 +157,7 @@ def main(cfg: DictConfig):
     optimizer = instantiate(cfg.training.optimizer, params=model.parameters())
     criterion = instantiate(cfg.training.criterion)
 
-    mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
+    # mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
 
     mlflow.set_experiment(cfg.exp_name)
     with mlflow.start_run():

@@ -1,0 +1,23 @@
+defaults:
+  - model: cnn
+  - training: training
+  - override hydra/sweeper: optuna
+  - _self_
+
+exp_name: hpo_cnn
+checkpoints_dir: checkpoints/
+
+hydra:
+  sweeper:
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: 42
+    direction: maximize
+    n_trials: 10
+    n_jobs: 1
+    params:
+      model.hyperparameters.hidden_dim: tag(log, int(16, 64))
+      model.hyperparameters.n_layers: range(1, 2)
+      model.hyperparameters.dropout: float(0.0, 0.5)
+      training.optimizer.lr: tag(log, interval(1e-4, 1e-2))
+      training.batch_size: choice(64, 128)

@@ -1,7 +1,7 @@
 hyperparameters:
   input_dim: 784
-  hidden_dim: 64
-  n_layers: 2
+  hidden_dim: 32
+  n_layers: 4
   output_dim: 10
   dropout: 0.2
 
