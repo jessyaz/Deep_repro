@@ -27,8 +27,13 @@ uv run train.py
 To inspect the results, you can use the following command:
 
 ```bash
-lsof -ti :5000 | xargs kill -9
 mlflow ui
+```
+
+If there is already a process using the port and you can stop it
+
+```bash
+lsof -ti :5000 | xargs kill -9
 ```
 
 # Evaluating a model
@@ -38,3 +43,16 @@ To evaluate a model, you can use the following command (obtaining the run_id fro
 ```bash
 uv run evaluate.py run_id=<run_id>
 ```
+
+## A note on the dataset label description
+Each example is assigned to one of the following labels: Label Description
+0 T-shirt/top
+1 Trouser
+2 Pullover
+3 Dress
+4 Coat
+5 Sandal
+6 Shirt
+7 Sneaker
+8 Bag
+9 Ankle boot

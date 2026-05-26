@@ -1,17 +1,20 @@
 """
 Evaluate a trained model from an MLflow run_id.
-Recovers checkpoint and config from the run, evaluates on the test set,
+Recovers the best checkpoint and the config from the run, then evaluates the model on the test set
 and logs a metrics report back as an artifact to the same run.
 """
 
 import tempfile
+from typing import cast
 import numpy as np
+import matplotlib.pyplot as plt
 import mlflow
+from mlflow.artifacts import download_artifacts
 import torch
 import hydra
 from omegaconf import DictConfig, OmegaConf
 from hydra.utils import instantiate
-from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
+from sklearn.metrics import classification_report, confusion_matrix
 from dataops.dataobject import DataObject
 
 
@@ -25,12 +28,12 @@ def main(cfg: DictConfig):
     with tempfile.TemporaryDirectory() as tmp:
         # Recover config and best checkpoint from the run
         exp_cfg = OmegaConf.load(
-            mlflow.artifacts.download_artifacts(
+            download_artifacts(
                 artifact_uri=f"runs:/{cfg.run_id}/config_exp.yaml",
                 dst_path=tmp,
             )
         )
-        ckpt_path = mlflow.artifacts.download_artifacts(
+        ckpt_path = download_artifacts(
             artifact_uri=f"runs:/{cfg.run_id}/checkpoints/best_checkpoint.pt",
             dst_path=tmp,
         )
@@ -66,9 +69,11 @@ def main(cfg: DictConfig):
         all_probs = np.array(all_probs)
 
         # Compute metrics
-        report_dict = classification_report(
-            all_labels, all_preds, output_dict=True, zero_division=0
-        )
+        report_dict = cast(dict,
+                           classification_report(all_labels,
+                                                 all_preds,
+                                                 output_dict=True)
+                           )
 
         print(f"Accuracy: {report_dict['accuracy']:.4f}")
         print(f"Macro F1: {report_dict['macro avg']['f1-score']:.4f}")
@@ -88,9 +93,25 @@ def main(cfg: DictConfig):
                 }
             )
             mlflow.log_text(
-                classification_report(all_labels, all_preds, zero_division=0),
+                cast(str, classification_report(all_labels, all_preds)),
                 "classification_report.txt",
             )
+
+            cm = confusion_matrix(all_labels, all_preds)
+            fig, ax = plt.subplots(figsize=(8, 6))
+            im = ax.imshow(cm, interpolation="nearest", cmap="Blues")
+            fig.colorbar(im, ax=ax)
+            classes = np.arange(cm.shape[0])
+            ax.set(
+                xticks=classes,
+                yticks=classes,
+                xlabel="Predicted label",
+                ylabel="True label",
+                title="Confusion Matrix",
+            )
+            fig.tight_layout()
+            mlflow.log_figure(fig, "confusion_matrix.png")
+            plt.close(fig)
 
 
 if __name__ == "__main__":
