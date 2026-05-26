@@ -22,7 +22,7 @@ import torch.nn.functional as F
 ###############################################################################
 
 
-# run that : uv run train.py model=cnn data=data_2d exp_name=cnn_experiment
+# For running a train with the CNN model: uv run train.py model=cnn data=data_2d exp_name=cnn_experiment
 class SimpleCNN(nn.Module):
     def __init__(self, input_channels, hidden_dim, n_layers, output_dim, dropout):
         super().__init__()
@@ -84,7 +84,6 @@ def train(
     optimizer: optim.Optimizer = None,
     criterion: nn.Module = None,
     checkpoint_dir: str = None,
-    noise_std: float = 0.0,
 ) -> float:
     best_accuracy = 0.0
 
@@ -93,8 +92,6 @@ def train(
         running_loss = 0.0
         for X_batch, y_batch in data_object.train_dl:
             optimizer.zero_grad()
-            if noise_std > 0.0:
-                X_batch = X_batch + torch.randn_like(X_batch) * noise_std
             outputs = model(X_batch)
             loss = criterion(outputs, y_batch)
             loss.backward()
@@ -178,7 +175,6 @@ def main(cfg: DictConfig):
             optimizer=optimizer,
             criterion=criterion,
             checkpoint_dir=cfg.checkpoints_dir + cfg.exp_name,
-            noise_std=cfg.training.noise_std,
         )
 
 

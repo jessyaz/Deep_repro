@@ -58,9 +58,8 @@ def main(cfg: DictConfig) -> float:
             optimizer=optimizer,
             criterion=criterion,
             checkpoint_dir=checkpoint_dir,
-            noise_std=cfg.training.noise_std,
         )
-        mlflow.log_metric("val/accuracy", best_val_accuracy)
+        mlflow.log_metric("val/best_accuracy", best_val_accuracy)
 
     # Returned value is maximized by Optuna (direction=maximize in the hpo config)
     return best_val_accuracy

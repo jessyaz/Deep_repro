@@ -1,9 +1,9 @@
 hyperparameters:
   input_channels: 1
-  hidden_dim: 32
+  hidden_dim: 64
   n_layers: 1
   output_dim: 10
-  dropout: 0.2
+  dropout: 0.5
 
 model:
   _target_: train.SimpleCNN

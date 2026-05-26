@@ -1,6 +1,5 @@
-batch_size: 128
+batch_size: 64
 epochs: 10
-noise_std: 0.0 # Gaussian noise std added to inputs during training (0 = disabled)
 
 optimizer:
   _target_: torch.optim.Adam
