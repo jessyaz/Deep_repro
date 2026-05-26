@@ -1,5 +1,5 @@
 # Deep_repro
-Industrial tools used to train and deploy machine learning models are valued for their reliability, flexibility, and ease of use. From our experience working with large, constantly evolving codebases—particularly in the context of deep learning research projects—we’d like to share a simple and effective setup that makes experiments reproducible.
+Industrial tools used to train and deploy machine learning models are valued for their reliability, flexibility, and ease of use. Drawing from our experience working with large, constantly evolving codebases (particularly in deep learning research projects) we would like to share a simple yet effective setup for making experiments both traceable and reproducible.
 
 
 # Installing everyting
