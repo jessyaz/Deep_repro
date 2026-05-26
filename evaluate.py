@@ -5,8 +5,6 @@ and logs a metrics report back as an artifact to the same run.
 """
 
 import tempfile
-from typing import Any, cast
-import train  # registers train.SimpleMLP / train.SimpleCNN for Hydra instantiate
 import numpy as np
 import mlflow
 import torch
@@ -22,7 +20,7 @@ def main(cfg: DictConfig):
     device = torch.device("cpu")
     print(f"Using device: {device}")
 
-    mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
+    # mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
 
     with tempfile.TemporaryDirectory() as tmp:
         # Recover config and best checkpoint from the run
