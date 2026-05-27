@@ -19,6 +19,25 @@ import torch.nn.functional as F
 ###############################################################################
 
 
+class SimpleMLP(nn.Module):
+    def __init__(self, input_dim, hidden_dim, n_layers, output_dim, dropout):
+        super().__init__()
+        layers = [nn.Linear(input_dim, hidden_dim), nn.ReLU(), nn.Dropout(dropout)]
+        for _ in range(n_layers - 1):
+            layers += [
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Dropout(dropout),
+            ]
+        self.mlp = nn.Sequential(*layers)
+        self.linear = nn.Linear(hidden_dim, output_dim)
+
+    def forward(self, X):
+        out = self.mlp(X)
+        y_hat = self.linear(out)
+        return y_hat
+
+
 # For running a train with the CNN model: uv run train.py model=cnn data=data_2d exp_name=cnn_experiment
 class SimpleCNN(nn.Module):
     def __init__(self, input_channels, hidden_dim, n_layers, output_dim, dropout):
@@ -46,25 +65,6 @@ class SimpleCNN(nn.Module):
     def forward(self, X):
         out = self.cnn(X)
         out = out.view(out.size(0), -1)
-        y_hat = self.linear(out)
-        return y_hat
-
-
-class SimpleMLP(nn.Module):
-    def __init__(self, input_dim, hidden_dim, n_layers, output_dim, dropout):
-        super().__init__()
-        layers = [nn.Linear(input_dim, hidden_dim), nn.ReLU(), nn.Dropout(dropout)]
-        for _ in range(n_layers - 1):
-            layers += [
-                nn.Linear(hidden_dim, hidden_dim),
-                nn.ReLU(),
-                nn.Dropout(dropout),
-            ]
-        self.mlp = nn.Sequential(*layers)
-        self.linear = nn.Linear(hidden_dim, output_dim)
-
-    def forward(self, X):
-        out = self.mlp(X)
         y_hat = self.linear(out)
         return y_hat
 
