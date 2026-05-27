@@ -18,32 +18,37 @@ from sklearn.metrics import classification_report, confusion_matrix
 from dataops.dataobject import DataObject
 
 
-@hydra.main(config_path="conf", config_name="eval", version_base="1.3")
+##TODO 7##
+# complete the parameters of the hydra decorator following the project structure
+@hydra.main(version_base="1.3")
 def main(cfg: DictConfig):
     device = torch.device("cpu")
     print(f"Using device: {device}")
 
+    ##TODO 11##
+    # Once everything is working consistently locally,
+    # Uncomment this line to set the MLflow tracking to the global performance
+    # dashboard and compete with your peers !
     # mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
 
     with tempfile.TemporaryDirectory() as tmp:
         # Recover config and best checkpoint from the run
+
+        ##TODO 8##
+        # Complete the artifacts_uri for the config file and the best set of parameters
         exp_cfg = OmegaConf.load(
             download_artifacts(
-                artifact_uri=f"runs:/{cfg.run_id}/config_exp.yaml",
+                artifact_uri=f"runs:/{cfg.run_id}/<complete here>",
                 dst_path=tmp,
             )
         )
         ckpt_path = download_artifacts(
-            artifact_uri=f"runs:/{cfg.run_id}/checkpoints/best_checkpoint.pt",
+            artifact_uri=f"runs:/{cfg.run_id}/checkpoints/<complete here>",
             dst_path=tmp,
         )
 
-        # Rebuild data pipeline from the recovered config file
-        data_object = DataObject(
-            data_path=exp_cfg.data.data_path,
-            flattened=exp_cfg.data.flattened,
-            batch_size=exp_cfg.training.batch_size,
-        )
+        ##TODO 9##
+        # Instantiate the data object from the hydra config
         data_object.make_datasets()
         data_object.make_dataloaders()
 
@@ -69,11 +74,9 @@ def main(cfg: DictConfig):
         all_probs = np.array(all_probs)
 
         # Compute metrics
-        report_dict = cast(dict,
-                           classification_report(all_labels,
-                                                 all_preds,
-                                                 output_dict=True)
-                           )
+        report_dict = cast(
+            dict, classification_report(all_labels, all_preds, output_dict=True)
+        )
 
         print(f"Accuracy: {report_dict['accuracy']:.4f}")
         print(f"Macro F1: {report_dict['macro avg']['f1-score']:.4f}")
@@ -109,8 +112,24 @@ def main(cfg: DictConfig):
                 ylabel="True label",
                 title="Confusion Matrix",
             )
+
+            thresh = cm.max() / 2.0
+            for i in range(cm.shape[0]):
+                for j in range(cm.shape[1]):
+                    ax.text(
+                        j,
+                        i,
+                        cm[i, j],
+                        ha="center",
+                        va="center",
+                        color="white" if cm[i, j] > thresh else "black",
+                    )
+
             fig.tight_layout()
-            mlflow.log_figure(fig, "confusion_matrix.png")
+
+            ##TODO 10##
+            # log the confusion matrix as an artifact to MLflow
+
             plt.close(fig)
 
 

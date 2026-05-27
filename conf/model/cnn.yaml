@@ -1,14 +1,6 @@
-hyperparameters:
-  input_channels: 1
-  hidden_dim: 64
-  n_layers: 1
-  output_dim: 10
-  dropout: 0.5
+##TODO 1##
+# following the mlp.yaml structure and the SimpleCNN class defined in model.py,
+# write the config file for the CNN model
 
-model:
-  _target_: train.SimpleCNN
-  input_channels: ${model.hyperparameters.input_channels}
-  hidden_dim: ${model.hyperparameters.hidden_dim}
-  n_layers: ${model.hyperparameters.n_layers}
-  output_dim: ${model.hyperparameters.output_dim}
-  dropout: ${model.hyperparameters.dropout}
+# note
+# as we are working without gpu, we recommand to begin with a one layer architecture CNN
