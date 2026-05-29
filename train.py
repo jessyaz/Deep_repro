@@ -156,7 +156,7 @@ def main(cfg: DictConfig):
     # Once everything is working consistently locally,
     # Uncomment this line to set the MLflow tracking to the global performance
     # dashboard and compete with your peers !
-    # mlflow.set_tracking_uri("https://mlflow-happyr.allynd.re/")
+    # mlflow.set_tracking_uri("http://172.19.1.76:4201")
 
     mlflow.set_experiment(cfg.exp_name)
     with mlflow.start_run():
