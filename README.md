@@ -1,5 +1,10 @@
 # Deep_repro
+
 Industrial tools used to train and deploy machine learning models are valued for their reliability, flexibility, and ease of use. Drawing from our experience working with large, constantly evolving codebases (particularly in deep learning research projects) we would like to share a simple yet effective setup for making experiments both traceable and reproducible.
+
+This repo is a more intricated example of reproducibility in deep learning, a standard example using Linear Regression is available in the [Linear_regression_reproducibility](https://github.com/J-ally/Deep_repro_LR) repository.
+
+Slides for the presentation are available in the /slides folder.
 
 
 # Installing everyting
